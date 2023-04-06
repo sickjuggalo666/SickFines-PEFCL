@@ -2,7 +2,7 @@ fx_version 'cerulean'
 game 'gta5'
 
 name "SickFines"
-description "FIne system useing PEFCL"
+description "Fine system using PEFCL"
 author "SickJuggalo666"
 version "1.0.0"
 lua54 'yes'

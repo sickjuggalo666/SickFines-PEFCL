@@ -4,12 +4,15 @@ PlayerData = ESX.GetPlayerData()
 local Inventory = exports.ox_inventory
 
 Citizen.CreateThread(function()
-    Inventory:displayMetadata({        
+    Inventory:displayMetadata({
         amount = 'Ticket Amount',
         PlayerName = 'Offender Name',
         OfficerName = 'Officer Name',
         date = 'Date'
     })
+
+    SetTargetOptions()
+
 end)
 
 local function OpenFineMenu()
@@ -77,7 +80,7 @@ function CNotify(noty_type,message)
             end
 
         elseif Config.Notifications.Client == 'YOUR_NOTIFICATIONS_HERE' then
-            
+
         end
     end
 end
