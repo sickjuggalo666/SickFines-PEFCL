@@ -4,7 +4,7 @@ local Bank = exports.pefcl
 
 local Inventory = exports.ox_inventory
 
---[[Citizen.CreateThread(function()
+Citizen.CreateThread(function()
     for k, v in pairs(Config.Jobs) do
         local tickets = {
             id = v.id,
@@ -15,8 +15,9 @@ local Inventory = exports.ox_inventory
         }
 
         Inventory:RegisterStash(tickets.id, tickets.label, tickets.slots, tickets.maxWeight, nil, tickets.groups)
+        print(('Creating Inventory for %s, Label: %s, Slots: %s, MaxWeight: %s, Groups: %s'):format(id,label,slots,maxWeight,groups))
     end
-end)]]
+end)
 
 local Discord_url = '' -- server side to protect you webhooks
 
@@ -45,6 +46,7 @@ AddEventHandler('SickFines:CheckInvoices', function(id, amount, reason, PlayerNa
     local xPlayer = ESX.GetPlayerFromId(src)
     local target = ESX.GetPlayerFromId(id)
     if xPlayer ~= nil then return end
+
     Bank:createInvoice(source, {
         to = PlayerName,
         toIdentifier = target.identifier,
@@ -61,11 +63,18 @@ AddEventHandler('SickFines:CheckInvoices', function(id, amount, reason, PlayerNa
         OfficerName = OfficerName,
         date = date
     }
-    if exports.ox_inventory:CanCarryItem(inv, item, count, metadata) then
+
+    if exports.ox_inventory:CanCarryItem(source, 'ticket', 1) then
         Inventory:AddItem(source, 'ticket', 1, info )
-        Inventory:AddItem(id, 'ticket', 1, info )
+    else
+        Inventory:AddItem('police_tickets', 'ticket', 1, info)
+    end
+
+    if exports.ox_inventory:CanCarryItem(id, 'ticket', 1) then
+        Inventory:AddItem(source, 'ticket', 1, info )
     end
     local name = "Sick Ticket System"
     local message = (('%s Issued a Ticket to %s, \nReaon: %s, \nAmount $:'..amount):format(OfficerName,PlayerName,reason,amount))
     LetEmKnow(name,message)
+
 end)
