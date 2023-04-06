@@ -24,7 +24,7 @@ local function OpenFineMenu()
         {type = 'input', label = 'Enter Your Name', description = 'Enter Your Name'},
         {type = 'date', label = 'Select Todays Date', icon = {'far', 'calendar'}, default = true, format = "MM/DD/YYYY"}
     })
-    if not FineInput or FineInput[1] == '' or FineInput[2] == '' or FineInput[3] == '' or FineInput[4] == '' then
+    if not FineInput or FineInput[1] == '' or FineInput[2] == '' or FineInput[3] == '' or FineInput[4] == '' or FineInput[5] == '' then
         lib.closeInputDialog()
         Cnotify(3, 'Inputs Need to be filled out')
         return

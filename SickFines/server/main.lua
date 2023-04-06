@@ -41,5 +41,10 @@ AddEventHandler('SickFines:CheckInvoices', function(id, amount, reason, PlayerNa
     }
 
     Inventory:AddItem('police_tickets', 'ticket', 1, info )
+    
+    TriggerEvent('SickFines:LetEmKnow', amount, reason, PlayerName, OfficerName, date)
 
 end)
+
+RegisterNetEvent('SickFines:LetEmKnow')
+AddEventHandler('SickFines:LetEmKnow', )
