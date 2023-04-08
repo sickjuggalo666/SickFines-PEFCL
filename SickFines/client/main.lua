@@ -5,10 +5,11 @@ PlayerData = ESX.GetPlayerData()
 PlayerJob = PlayerData.job.name
 
 local Inventory = exports.ox_inventory
+local Target = exports.ox_target
 
 local function SetUpTargets()
     Refresh()
-    exports.ox_target:addBoxZone({
+    Target:addBoxZone({
         coords = vec3(487.5118, -983.9824, 26.2734),
         size = vec3(2, 2, 2),
         rotation = 45,
@@ -49,10 +50,10 @@ local function SetUpTargets()
             end
         }
     }
-    
-    exports.ox_target:addGlobalPlayer(options)
+
+    Target:addGlobalPlayer(options)
     for k,v in pairs(Config.Jobs) do
-        exports.ox_target:addBoxZone({
+        Target:addBoxZone({
             coords = v.coords,
             size = vec3(2, 2, 2),
             rotation = 45,
@@ -88,15 +89,15 @@ Citizen.CreateThread(function()
     SetUpTargets()
 end)
 
-RegisterNetEvent("esx:setJob") 
-AddEventHandler( "esx:setJob", function(job) 
-    PlayerData.job = job 
+RegisterNetEvent("esx:setJob")
+AddEventHandler( "esx:setJob", function(job)
+    PlayerData.job = job
     if Config.PoliceJobs[PlayerData.job.name] then
         Job = true
     else
         Job = false
     end
-end) 
+end)
 
 
 local function Refresh()
