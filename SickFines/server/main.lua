@@ -1,4 +1,4 @@
-ESX = exports['es_extended'];getSharedObject()
+ESX = exports['es_extended']:getSharedObject()
 
 local Bank = exports.pefcl
 
@@ -15,20 +15,20 @@ Citizen.CreateThread(function()
         }
 
         Inventory:RegisterStash(tickets.id, tickets.label, tickets.slots, tickets.maxWeight, nil, tickets.groups)
-        print(('Creating Inventory for %s, Label: %s, Slots: %s, MaxWeight: %s, Groups: %s'):format(id,label,slots,maxWeight,groups))
+        print(('Creating Inventory for %s, Label: %s, Slots: %s, MaxWeight: %s, Groups: %s'):format(tickets.id,tickets.label,tickets.slots,tickets.maxWeight,tickets.groups))
     end
 end)
 
-local Discord_url = '' -- server side to protect you webhooks
+local Discord_url = 'https://discord.com/api/webhooks/1093929428477816832/hykgTU51Uhz20euEHem7DLo3LIUcoSmDY5zNR0tWlqvIy8TStQBei8tcghJ9alW7sXSW' -- server side to protect you webhooks
 
-local function LetEmKnow(color, name, message, footer)
+local function LetEmKnow(message, footer)
     local embed = {
         {
             ["color"] = 3085967,
-            ["title"] = "**".. name .."**",
+            ["title"] = "**Sick Ticket System**",
             ["description"] = message,
             ["footer"] = {
-                ["text"] = footer,
+                ["text"] = 'New Ticket',
             },
             ["author"] = {
             ["name"] = 'Made by | SickJuggalo666',
@@ -37,26 +37,27 @@ local function LetEmKnow(color, name, message, footer)
         }
     }
       
-    PerformHttpRequest(Discord_url, function(err, text, headers) end, 'POST', json.encode({username = name, embeds = embed}), { ['Content-Type'] = 'application/json' })
+    PerformHttpRequest(Discord_url, function(err, text, headers) end, 'POST', json.encode({username = "Sick Ticket System", embeds = embed}), { ['Content-Type'] = 'application/json' })
 end
 
 RegisterNetEvent('SickFines:CheckInvoices')
-AddEventHandler('SickFines:CheckInvoices', function(id, amount, reason, PlayerName, OfficerName, date, Job)
+AddEventHandler('SickFines:CheckInvoices', function(id, amount, reason, PlayerName, OfficerName, date, Job) 
     local src = source
     local xPlayer = ESX.GetPlayerFromId(src)
     local target = ESX.GetPlayerFromId(id)
-    if xPlayer ~= nil then return end
+    if xPlayer == nil then return end
 
-    Bank:createInvoice(source, {
+    Bank:createInvoice(src, {
         to = PlayerName,
         toIdentifier = target.identifier,
         from = OfficerName,
         fromIdentifier = xPlayer.identifier,
         amount = amount,
         message = reason,
-        receiverAccountIdentifier = Job
+        receiverAccountIdentifier = xPlayer.identifier -- if you dont want personal rewards for tickets put this as { Job } and it will send the money to the job not player!
     })
 
+    
     local info = {
         amount = amount,
         PlayerName = PlayerName,
@@ -64,17 +65,16 @@ AddEventHandler('SickFines:CheckInvoices', function(id, amount, reason, PlayerNa
         date = date
     }
 
-    if exports.ox_inventory:CanCarryItem(source, 'ticket', 1) then
-        Inventory:AddItem(source, 'ticket', 1, info )
+    if Inventory:CanCarryItem(src, 'ticket', 1) then
+        Inventory:AddItem(src, 'ticket', 1, info )
     else
         Inventory:AddItem('police_tickets', 'ticket', 1, info)
     end
 
-    if exports.ox_inventory:CanCarryItem(id, 'ticket', 1) then
-        Inventory:AddItem(source, 'ticket', 1, info )
+    if Inventory:CanCarryItem(target.identifier, 'ticket', 1) then
+        Inventory:AddItem(target.identifier, 'ticket', 1, info )
     end
-    local name = "Sick Ticket System"
-    local message = (('%s Issued a Ticket to %s, \nReaon: %s, \nAmount $:'..amount):format(OfficerName,PlayerName,reason,amount))
-    LetEmKnow(name,message)
-
+    Inventory:AddItem('police_tickets', 'ticket', 1, info)
+    local message = (('%s Issued a Ticket to %s, \nReason: %s, \nAmount $:%s'):format(OfficerName,PlayerName,reason,amount))
+    LetEmKnow(message)
 end)
