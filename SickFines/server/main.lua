@@ -19,7 +19,7 @@ Citizen.CreateThread(function()
     end
 end)
 
-local Discord_url = 'https://discord.com/api/webhooks/1093929428477816832/hykgTU51Uhz20euEHem7DLo3LIUcoSmDY5zNR0tWlqvIy8TStQBei8tcghJ9alW7sXSW' -- server side to protect you webhooks
+local Discord_url = '' -- server side to protect you webhooks
 
 local function LetEmKnow(message, footer)
     local embed = {
