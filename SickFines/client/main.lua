@@ -1,8 +1,7 @@
 ESX = exports['es_extended']:getSharedObject()
 
 local Job = false
-PlayerData = ESX.GetPlayerData()
-PlayerJob = PlayerData.job.name
+PlayerData = {}
 
 local Inventory = exports.ox_inventory
 local Target = exports.ox_target
@@ -36,13 +35,12 @@ local function OpenFineMenu()
     local PlayerName = FineInput[4]
     local OfficerName = FineInput[5]
     local date = FineInput[6]
-    local job = PlayerJob
+    local job = PlayerData.job.name
 
     TriggerServerEvent('SickFines:CheckInvoices', id, amount, reason, PlayerName, OfficerName, date, Job)
 end
 
 local function SetUpTargets()
-    Refresh()
     Target:addBoxZone({
         coords = vec3(487.5118, -983.9824, 26.2734),
         size = vec3(2, 2, 2),
@@ -120,6 +118,10 @@ Citizen.CreateThread(function()
         date = 'Date'
     })
     SetUpTargets()
+    while ESX.GetPlayerData().job == nil do
+        Citizen.Wait(500)
+    end
+    PlayerData = ESX.GetPlayerData()
 end)
 
 RegisterNetEvent("esx:setJob") 
