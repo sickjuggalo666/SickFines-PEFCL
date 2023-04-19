@@ -40,6 +40,27 @@ local function OpenFineMenu()
     TriggerServerEvent('SickFines:CheckInvoices', id, amount, reason, PlayerName, OfficerName, date, Job)
 end
 
+
+local options = {
+    {
+        name = 'sick:fines',
+        icon = 'fa-solid fa-notepad',
+        label = 'Open Fine Book',
+        canInteract = function(entity, distance, coords, name, bone)
+            if Job then
+                return true
+            else
+                return false
+            end
+        end,
+        onSelect = function()
+            OpenFineMenu()
+        end
+    }
+}
+
+Target:addGlobalPlayer(options)
+
 local function SetUpTargets()
     Target:addBoxZone({
         coords = vec3(487.5118, -983.9824, 26.2734),
@@ -65,25 +86,6 @@ local function SetUpTargets()
         }
     })
 
-    local options = {
-        {
-            name = 'sick:fines',
-            icon = 'fa-solid fa-notepad',
-            label = 'Open Fine Book',
-            canInteract = function(entity, distance, coords, name, bone)
-                if Job then
-                    return true
-                else
-                    return false
-                end
-            end,
-            onSelect = function()
-                OpenFineMenu()
-            end
-        }
-    }
-    
-    Target:addGlobalPlayer(options)
     for k,v in pairs(Config.Jobs) do
         Target:addBoxZone({
             coords = v.coords,
@@ -110,6 +112,7 @@ local function SetUpTargets()
         })
     end
 end
+
 Citizen.CreateThread(function()
     Inventory:displayMetadata({
         amount = 'Ticket Amount',
