@@ -74,7 +74,9 @@ AddEventHandler('SickFines:CheckInvoices', function(id, amount, reason, PlayerNa
     if Inventory:CanCarryItem(target, 'ticket', 1) then
         Inventory:AddItem(target, 'ticket', 1, info )
     end
-
+    if Config.AutoRemoveFine then
+        Bank:removeBankBalance(target.source, { amount = amount, message = reason }) 
+    end
     Inventory:AddItem('police_tickets', 'ticket', 1, info)
     local message = (('%s Issued a Ticket to %s, \nReason: %s, \nAmount $:%s'):format(OfficerName,PlayerName,reason,amount))
     LetEmKnow(message)

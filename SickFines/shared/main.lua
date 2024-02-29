@@ -1,5 +1,7 @@
 Config = {}
 
+Config.AutoRemoveFine = 'true' -- if true the fine will auto remove from bank if false it will skip that step and require players to pay at bank
+
 Config.PoliceJobs = {
     ['police'] = true,
     ['bcso'] = true,
