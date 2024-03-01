@@ -75,7 +75,21 @@ AddEventHandler('SickFines:CheckInvoices', function(id, amount, reason, PlayerNa
         Inventory:AddItem(target, 'ticket', 1, info )
     end
     if Config.AutoRemoveFine then
-        Bank:removeBankBalance(target.source, { amount = amount, message = reason }) 
+        local BankAmount = Bank:getDefaultAccountBalance(target.source)
+        if BankAmount >= amount then
+            Bank:removeBankBalance(target.source, { amount = amount, message = reason })
+        else
+            TriggerClientEvent('ox_lib:notify', target.source, {
+                title = 'Fines',
+                description = 'You Don\'t have enough money to auto pay the ticket!',
+                type = 'error'
+            })
+            TriggerClientEvent('ox_lib:notify', src, {
+                title = 'Fines',
+                description = 'Offender Doesn\'t have enough money to auto pay the ticket!',
+                type = 'error'
+            })
+        end
     end
     Inventory:AddItem('police_tickets', 'ticket', 1, info)
     local message = (('%s Issued a Ticket to %s, \nReason: %s, \nAmount $:%s'):format(OfficerName,PlayerName,reason,amount))
