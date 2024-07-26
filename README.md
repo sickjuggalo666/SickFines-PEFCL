@@ -16,4 +16,4 @@ If you need ANY help or support follow link below and we will get you sorted out
 
 Discord: https://discord.gg/YCsBGB58eg
 
-Docs: https://juggin666.com
+Docs: https://docs.sickscripts.com/
